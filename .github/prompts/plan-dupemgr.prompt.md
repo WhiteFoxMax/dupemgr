@@ -10,6 +10,34 @@
 - **Workflow**: Two-step with user control (1) identify duplicates, (2) user selects actions
 - **UI Theme**: Dark mode (modern, professional aesthetic, easy on the eyes)
 
+## UI Design & Dark Mode Specifications
+
+### Theme Implementation
+- Use **Tailwind CSS** or **styled-components** for consistent dark mode styling
+- Implement CSS custom properties (variables) for easy theme switching
+- Store theme preference in `electron-store` for persistence
+- Support system dark mode detection (Windows Settings)
+
+### Dark Mode Colors
+- **Primary Background**: `#1e1e1e` (main container)
+- **Secondary Background**: `#2d2d2d` (cards, panels)
+- **Tertiary Background**: `#3d3d3d` (input fields, borders)
+- **Primary Text**: `#e0e0e0` (main text)
+- **Secondary Text**: `#a0a0a0` (labels, help text)
+- **Accent Blue**: `#0078d4` (buttons, links, highlights)
+- **Accent Cyan**: `#50e6e6` (status indicators, hover states)
+- **Status Green**: `#4ec9b0` (success, completed)
+- **Status Orange**: `#ce9178` (warning, pending)
+- **Status Red**: `#f48771` (error, failed)
+
+### Component Styling
+- Buttons: Dark background with blue accent on hover
+- Input fields: Dark background with subtle border
+- Cards: Dark container with thin border for definition
+- Progress bars: Gradient from accent blue to cyan
+- Modals: Semi-transparent dark overlay with card-style content
+- Scrollbars: Thin, dark themed with accent hover state
+
 ## Implementation Steps
 
 ### 1. Initialize Electron + TypeScript Project Structure
@@ -217,6 +245,7 @@ interface FileMetadata {
 - `react` - UI framework
 - `typescript` - Type safety
 - `crypto` (Node.js built-in) - MD5/SHA256 hashing
+- `tailwindcss` - Dark mode styling (or `styled-components` as alternative)
 - `exifparser` - EXIF data extraction
 - `fluent-ffprobe` - FFmpeg wrapper for video metadata
 - `electron-store` - Persistent storage for app state
