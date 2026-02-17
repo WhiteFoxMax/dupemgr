@@ -63,22 +63,11 @@ export default function FileBrowser({ folderPath, onBack, onScanComplete }: File
   };
 
   return (
-    <div className="flex flex-col h-screen bg-[#1e1e1e]">
+    <div className="flex flex-col h-screen bg-gradient-to-br from-gray-900 to-gray-700 text-white">
       {/* Header */}
-      <div className="bg-gradient-to-r from-[#2d2d2d] to-[#1e1e1e] border-b border-[#3d3d3d] p-6">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white px-8 py-6 shadow-md">
         <div className="flex items-center justify-between">
-          <div className="flex-1">
-            <button
-              onClick={onBack}
-              className="mb-4 px-4 py-2 bg-[#3d3d3d] hover:bg-[#4d4d4d] text-[#e0e0e0] rounded-lg hover:text-[#50e6e6] transition-all duration-200 font-semibold"
-            >
-              ← Back to Home
-            </button>
-            <h2 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#50e6e6] to-[#0078d4]">
-              📂 {folderPath.split('\\').pop()}
-            </h2>
-            <p className="text-sm text-[#a0a0a0] mt-1">{folderPath}</p>
-          </div>
+          <h2 className="text-3xl font-bold">📂 {folderPath}</h2>
         </div>
       </div>
 
@@ -87,98 +76,57 @@ export default function FileBrowser({ folderPath, onBack, onScanComplete }: File
         {isScanning ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#50e6e6] mx-auto mb-4"></div>
-              <p className="text-[#a0a0a0]">Scanning directory...</p>
+              <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-400 mx-auto mb-4"></div>
+              <p className="text-gray-300 text-xl">Scanning directory...</p>
             </div>
           </div>
         ) : error ? (
-          <div className="bg-[#f48771] bg-opacity-10 border border-[#f48771] text-[#f48771] p-4 rounded-lg">
+          <div className="bg-red-500 bg-opacity-10 border border-red-500 text-red-500 p-6 rounded-lg text-lg">
             {error}
           </div>
         ) : (
           <>
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 mb-8">
-              <div className="bg-gradient-to-br from-[#2d2d2d] to-[#1e1e1e] p-6 rounded-xl border border-[#3d3d3d] hover:border-[#50e6e6] transition-all duration-300 transform hover:scale-105">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-2xl">📄</span>
-                  <p className="text-[#a0a0a0] text-sm font-semibold">TOTAL FILES</p>
-                </div>
-                <p className="text-3xl font-black text-[#50e6e6]">{stats.totalFiles}</p>
+            <div className="grid grid-cols-1 gap-4 mb-8">
+              <div className="p-6 bg-gray-800 rounded-lg shadow-md">
+                <h3 className="text-2xl font-bold">Total Files</h3>
+                <p className="text-4xl font-extrabold">{stats.totalFiles}</p>
               </div>
-              <div className="bg-gradient-to-br from-[#2d2d2d] to-[#1e1e1e] p-6 rounded-xl border border-[#3d3d3d] hover:border-[#0078d4] transition-all duration-300 transform hover:scale-105">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-2xl">💾</span>
-                  <p className="text-[#a0a0a0] text-sm font-semibold">TOTAL SIZE</p>
-                </div>
-                <p className="text-3xl font-black text-[#0078d4]">{formatSize(stats.totalSize)}</p>
-              </div>
-              <div className="bg-gradient-to-br from-[#2d2d2d] to-[#1e1e1e] p-6 rounded-xl border border-[#3d3d3d] hover:border-[#ce9178] transition-all duration-300 transform hover:scale-105">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-2xl">⚠️</span>
-                  <p className="text-[#a0a0a0] text-sm font-semibold">DUPLICATES</p>
-                </div>
-                <p className="text-3xl font-black text-[#ce9178]">Coming Soon</p>
+              <div className="p-6 bg-gray-800 rounded-lg shadow-md">
+                <h3 className="text-2xl font-bold">Total Size</h3>
+                <p className="text-4xl font-extrabold">{formatSize(stats.totalSize)}</p>
               </div>
             </div>
 
             {/* File List */}
-            <div className="space-y-2">
-              <h3 className="text-lg font-bold text-[#e0e0e0] mb-4">🗂️ Directory Contents ({files.length})</h3>
-              {files.length === 0 ? (
-                <div className="bg-[#2d2d2d] p-8 rounded-xl border border-[#3d3d3d] text-center">
-                  <p className="text-[#a0a0a0] text-lg">No files found in this directory</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {files.map((file) => (
+                <div
+                  key={file.path}
+                  className="p-6 bg-gray-800 rounded-lg shadow-md hover:bg-gray-700 transition-all duration-200"
+                >
+                  <h4 className="text-2xl font-bold truncate">{file.name}</h4>
+                  <p className="text-lg text-gray-400">{file.type}</p>
+                  <p className="text-lg text-gray-400">{formatSize(file.size)}</p>
+                  <p className="text-lg text-gray-400">{formatDate(file.modified)}</p>
                 </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-96 overflow-y-auto">
-                  {files.map((file, idx) => (
-                    <div
-                      key={idx}
-                      className="bg-[#2d2d2d] p-4 rounded-lg border border-[#3d3d3d] hover:border-[#50e6e6] hover:bg-[#3d3d3d] transition-all duration-200 cursor-pointer group"
-                    >
-                      <div className="flex items-start gap-3">
-                        <span className="text-2xl mt-1 group-hover:scale-125 transition-transform">
-                          {file.type === 'directory' ? '📁' : '📄'}
-                        </span>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-[#e0e0e0] font-semibold truncate text-sm">{file.name}</p>
-                          <div className="flex items-center gap-2 mt-2 flex-wrap">
-                            {file.type === 'file' && (
-                              <span className="text-xs bg-[#3d3d3d] px-2 py-1 rounded text-[#50e6e6]">
-                                {formatSize(file.size)}
-                              </span>
-                            )}
-                            <span className="text-xs bg-[#3d3d3d] px-2 py-1 rounded text-[#0078d4]">
-                              {file.type}
-                            </span>
-                          </div>
-                          <p className="text-xs text-[#a0a0a0] mt-2">{formatDate(file.modified)}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Duplicates Stub Button */}
-            <div className="mt-8 pt-6 border-t border-[#3d3d3d]">
-              <button
-                disabled
-                className="w-full relative group"
-              >
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-[#ce9178] to-[#f48771] rounded-lg blur opacity-30 group-hover:opacity-50"></div>
-                <div className="relative py-4 px-6 bg-[#2d2d2d] rounded-lg flex items-center justify-center gap-2">
-                  <span className="text-xl">⚡</span>
-                  <span className="text-[#ce9178] font-black">ANALYZE FOR DUPLICATES</span>
-                </div>
-              </button>
-              <p className="text-sm text-[#a0a0a0] mt-3 text-center">
-                🔜 Hash-based duplicate detection coming soon!
-              </p>
+              ))}
             </div>
           </>
         )}
+      </div>
+
+      {/* Footer Buttons */}
+      <div className="flex justify-center items-center h-full bg-blue-800 p-6">
+        {/* Centered Select Button */}
+        <div className="relative h-screen">
+          <button
+            onClick={onBack}
+            className="select-button"
+          >
+            Select Folder
+          </button>
+        </div>
       </div>
     </div>
   );
